@@ -62,9 +62,9 @@ def login():
             abort(401)
 
         session.clear()
-        session["username"] = username
+        session["username"] = user["username"]
         session["user_id"] = user["id"]
-        return {"username": username, "user_id": user["id"]}
+        return {"username": user["username"], "user_id": user["id"]}
 
     abort(400)
 

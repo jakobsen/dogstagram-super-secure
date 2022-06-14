@@ -1,4 +1,10 @@
+# python files
 __pycache__
 .venv
+
+# vscode 
 .vscode
+
+# project specific
 instance
+api/scratch.sql

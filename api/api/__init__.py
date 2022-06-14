@@ -6,10 +6,13 @@ from datetime import timedelta
 
 from . import db
 from . import auth
+from . import posts
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+
     app.config.from_mapping(
         SECRET_KEY="secret", DATABASE=os.path.join(app.instance_path, "api.sqlite")
     )
@@ -36,5 +39,5 @@ def create_app(test_config=None):
 
     db.init_app(app)
     app.register_blueprint(auth.bp)
-    CORS(app)
+    app.register_blueprint(posts.bp)
     return app
