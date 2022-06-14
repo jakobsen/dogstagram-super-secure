@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { API_ROOT_URL } from "../../constants";
 
 interface LoginProps {
   onLogin: (e: React.FormEvent, username: string, password: string) => void;
@@ -56,7 +55,7 @@ const Container = styled.div`
   gap: 8px;
   padding: 16px;
   background-color: #fff;
-  border: 1px #aaa solid;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   width: max-content;
   margin: 80px auto;

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Login from "./components/Login";
+import HomeScreen from "./Pages/HomeScreen";
 import UserContext from "./useContext";
 
 function App() {
@@ -12,7 +13,6 @@ function App() {
 
   function handleLogin(e: React.FormEvent, username: string, password: string) {
     e.preventDefault();
-    console.log({ username, password });
     axios
       .post<{ username: string; user_id: number }>("/auth/login", {
         username,
@@ -25,12 +25,12 @@ function App() {
       .catch(() => setLoginFailed(true));
   }
 
-  const isLoggedIn = true; //user.username !== undefined && user.userId !== undefined;
+  const isLoggedIn = user.username !== undefined && user.userId !== undefined;
 
   return (
     <UserContext.Provider value={user}>
       {!isLoggedIn && <Login onLogin={handleLogin} loginFailed={loginFailed} />}
-      {isLoggedIn && <h1>App goes here</h1>}
+      {isLoggedIn && <HomeScreen />}
     </UserContext.Provider>
   );
 }

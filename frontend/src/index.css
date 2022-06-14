@@ -73,3 +73,7 @@ h6 {
   isolation: isolate;
   height: 100%;
 }
+
+:root {
+  --border-color: #dbdbdb;
+}
