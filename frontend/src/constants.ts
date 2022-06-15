@@ -1,3 +1,3 @@
-const API_ROOT_URL = "http://localhost:5000";
+const API_ROOT_URL = "https://localhost:5000";
 
 export { API_ROOT_URL };

@@ -3,7 +3,11 @@ import styled from "styled-components";
 import UserContext from "../../useContext";
 import { PlusSquare } from "react-feather";
 
-function Header() {
+interface HeaderProps {
+  onLogOut: () => void;
+}
+
+function Header({ onLogOut }: HeaderProps) {
   const { username } = useContext(UserContext);
   return (
     <Wrapper>
@@ -12,7 +16,7 @@ function Header() {
         <RightWrapper>
           <NewPostButton />
           <Username>{username ?? "admin"}</Username>
-          <LogOut href="/?logout=true">Logg ut</LogOut>
+          <LogOut onClick={onLogOut}>Logg ut</LogOut>
         </RightWrapper>
       </Container>
     </Wrapper>
@@ -56,7 +60,7 @@ const Username = styled.span`
   font-weight: 600;
 `;
 
-const LogOut = styled.a`
+const LogOut = styled.button`
   color: #666;
   text-decoration: none;
 `;

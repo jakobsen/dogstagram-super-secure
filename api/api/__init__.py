@@ -11,10 +11,14 @@ from . import posts
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+    CORS(app, supports_credentials=True, origins=["https://localhost:3000"])
 
     app.config.from_mapping(
-        SECRET_KEY="secret", DATABASE=os.path.join(app.instance_path, "api.sqlite")
+        SECRET_KEY="secret",
+        DATABASE=os.path.join(app.instance_path, "api.sqlite"),
+        SESSION_REFRESH_EACH_REQUEST=False,
+        SESSION_COOKIE_SAMESITE="none",
+        SESSION_COOKIE_SECURE=True,
     )
 
     if test_config is None:

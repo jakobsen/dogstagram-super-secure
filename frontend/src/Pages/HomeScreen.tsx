@@ -1,10 +1,14 @@
 import Feed from "../components/Feed";
 import Header from "../components/Header";
 
-function HomeScreen() {
+interface HomeScreenProps {
+  onLogOut: () => void;
+}
+
+function HomeScreen({ onLogOut }: HomeScreenProps) {
   return (
     <>
-      <Header />
+      <Header onLogOut={onLogOut} />
       <Feed />
     </>
   );
