@@ -1,5 +1,6 @@
 export interface IPost {
   author: string;
+  authorImage: string;
   authorId: number;
   body: string;
   comments: IComment[];

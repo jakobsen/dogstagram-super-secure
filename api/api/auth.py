@@ -12,13 +12,6 @@ from flask_cors import CORS
 from api.db import get_db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
-CORS(
-    bp,
-    supports_credentials=True,
-    origins=[
-        "https://localhost:3000",
-    ],
-)
 
 
 @bp.route("/register", methods=("GET", "POST"))
@@ -45,7 +38,7 @@ def register():
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
-                return "Success"  # return redirect(url_for("auth.login"))
+                return "Success"
 
         if error is None:
             error = "Success"
@@ -63,7 +56,7 @@ def login():
         username = request.json.get("username")
         password = request.json.get("password")
         user = db.execute(
-            f"SELECT * FROM user WHERE username = '{username}' and password = '{password}'"
+            f"SELECT * FROM user WHERE username = '{username}' and password = '{password}'",
         ).fetchone()
 
         if user is None:
@@ -72,7 +65,11 @@ def login():
         session.clear()
         session["username"] = user["username"]
         session["user_id"] = user["id"]
-        return {"username": user["username"], "user_id": user["id"]}
+        return {
+            "username": user["username"],
+            "user_id": user["id"],
+            "imageUrl": user["image_url"],
+        }
 
     abort(400)
 
@@ -80,7 +77,7 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get("user_id")
-
+    print(session)
     if user_id is None:
         g.user = None
     else:
@@ -109,4 +106,8 @@ def login_required(view):
 @bp.route("/")
 @login_required
 def get():
-    return {"username": g.user["username"], "id": g.user["id"]}
+    return {
+        "username": g.user["username"],
+        "id": g.user["id"],
+        "imageUrl": g.user["image_url"],
+    }

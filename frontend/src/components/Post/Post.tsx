@@ -44,7 +44,8 @@ function Post({ post }: PostProps) {
 
   return (
     <Container>
-      <Top>
+      <Top href={`/${post.author}`}>
+        <AuthorImage src={post.authorImage} />
         <SmallBold>{post.author}</SmallBold>
       </Top>
       <Image src={post.imageurl} onDoubleClick={onLike} />
@@ -59,6 +60,11 @@ function Post({ post }: PostProps) {
           </LikeButton>
           <SmallBold>{postLikes.length} liker dette</SmallBold>
         </Likes>
+        <PostBody>
+          <SmallBold>{post.author}</SmallBold>
+          {post.body}
+        </PostBody>
+        <Divider />
         <Comments>
           {postComments.map((comment) => (
             <Comment key={comment.id}>
@@ -90,10 +96,24 @@ const Container = styled.article`
   border: solid 1px var(--border-color);
   background-color: #fff;
   border-radius: 8px;
+  padding-bottom: 16px;
 `;
 
-const Top = styled.div`
-  padding: 8px 16px;
+const Top = styled.a`
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const AuthorImage = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const Image = styled.img`
@@ -114,6 +134,7 @@ const Likes = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 8px;
 `;
 
 const LikeButton = styled.button`
@@ -125,6 +146,20 @@ const LikeButton = styled.button`
 
 const Comments = styled.div`
   padding-block: 8px;
+`;
+
+const PostBody = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+`;
+
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid var(--border-color);
+  width: 97%;
+  margin-inline: auto;
 `;
 
 const Comment = styled.div`

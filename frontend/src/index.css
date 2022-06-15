@@ -30,8 +30,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
     helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial,
     sans-serif;
-  color: #262626;
-  background-color: #fafafa;
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 /*
   6. Improve media defaults
@@ -76,4 +76,6 @@ h6 {
 
 :root {
   --border-color: #dbdbdb;
+  --text-color: #262626;
+  --background-color: #fafafa;
 }

@@ -11,7 +11,7 @@ from . import posts
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app, supports_credentials=True, origins=["https://localhost:3000"])
+    CORS(app, supports_credentials=True)
 
     app.config.from_mapping(
         SECRET_KEY="secret",

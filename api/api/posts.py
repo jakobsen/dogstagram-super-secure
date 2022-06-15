@@ -10,7 +10,6 @@ from .auth import login_required
 from api.db import get_db
 
 bp = Blueprint("post", __name__, url_prefix="/posts")
-CORS(bp, supports_credentials=True, origins=["https://localhost:3000"])
 
 
 def get_posts():
@@ -19,7 +18,21 @@ def get_posts():
         for post in (
             get_db()
             .execute(
-                "SELECT p.id, p.created, p.imageurl, p.body, a.username AS author, a.id AS authorid FROM post p JOIN user a ON author_id = a.id ORDER BY p.created DESC"
+                """
+                SELECT
+                    p.id,
+                    p.created,
+                    p.imageurl,
+                    p.body,
+                    user.username AS author,
+                    user.id AS authorid,
+                    user.image_url AS authorImage
+                FROM
+                    post p
+                    JOIN USER ON p.author_id = user.id
+                ORDER BY
+                    p.created DESC
+                """
             )
             .fetchall()
         )
@@ -30,7 +43,7 @@ def get_post(id, check_author=False):
     post = (
         get_db()
         .execute(
-            f"SELECT p.id, p.created, p.imageurl, p.body, a.username AS author, a.id AS authorid FROM post p JOIN user a WHERE p.id = f{id}"
+            f"SELECT p.id, p.created, p.imageurl, p.body, user.username AS author, user.id AS authorid, user.image_url AS authorImage FROM post p JOIN user ON p.author_id = user.id WHERE p.id = '{id}'"
         )
         .fetchone()
     )
@@ -41,12 +54,27 @@ def get_post(id, check_author=False):
     if check_author and post["author_id"] != g.user["id"]:
         abort(403)
 
+    return dict(post)
+
+
+def get_post_with_comments_and_likes(id):
+    post = get_post(id)
+    db = get_db()
+    comments = db.execute(
+        "SELECT username, body, created, comment.id AS id FROM comment JOIN user ON comment.author_id = user.id WHERE post_id = ? AND deleted = 0",
+        (post["id"],),
+    ).fetchall()
+    likes = db.execute(
+        "SELECT username FROM post_like JOIN user ON post_like.user_id = user.id WHERE post_id = ?",
+        (post["id"],),
+    ).fetchall()
+    post["comments"] = [dict(comment) for comment in comments]
+    post["likes"] = [like["username"] for like in likes]
     return post
 
 
 def get_posts_with_comments_and_likes():
     posts = get_posts()
-    print(posts)
     for post in posts:
         comments = (
             get_db()
@@ -69,15 +97,31 @@ def get_posts_with_comments_and_likes():
     return posts
 
 
-@bp.route("/", methods=("GET",))
+@bp.route("/", methods=("GET", "POST"))
 @login_required
 def posts():
-    return {"posts": get_posts_with_comments_and_likes()}
+    if request.method == "GET":
+        return {"posts": get_posts_with_comments_and_likes()}
+    if request.method == "POST":
+        image_url = request.json.get("imageUrl")
+        body = request.json.get("body")
+        print(image_url)
+        if image_url is None or body is None:
+            abort(400)
+        db = get_db()
+        db.execute(
+            "INSERT INTO post (imageurl, body, author_id) VALUES (?, ?, ?)",
+            (image_url, body, g.user["id"]),
+        )
+        db.commit()
+        new_id = db.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]
+        return get_post_with_comments_and_likes(new_id)
 
 
 @bp.route("/<id>", methods=("GET",))
+@login_required
 def get(id):
-    return {"post": get_post(id)}
+    return {"post": get_post_with_comments_and_likes(id)}
 
 
 @bp.route("/<id>/comment", methods=("GET", "POST"))

@@ -7,17 +7,28 @@ import UserContext from "./useContext";
 import styled from "styled-components";
 
 function App() {
-  const [user, setUser] = useState<{ username?: string; userId?: number }>({
+  const [user, setUser] = useState<{
+    username?: string;
+    userId?: number;
+    imageUrl?: string;
+  }>({
     username: undefined,
     userId: undefined,
+    imageUrl: undefined,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [loginFailed, setLoginFailed] = useState(false);
 
   useEffect(() => {
     axios
-      .get<{ id: number; username: string }>("/auth")
-      .then(({ data }) => setUser({ username: data.username, userId: data.id }))
+      .get<{ id: number; username: string; imageUrl: string }>("/auth/")
+      .then(({ data }) =>
+        setUser({
+          username: data.username,
+          userId: data.id,
+          imageUrl: data.imageUrl,
+        })
+      )
       .catch()
       .finally(() => setIsLoading(false));
   }, []);
@@ -26,12 +37,19 @@ function App() {
     e.preventDefault();
     setIsLoading(true);
     axios
-      .post<{ username: string; user_id: number }>("/auth/login", {
-        username,
-        password,
-      })
+      .post<{ username: string; user_id: number; imageUrl: string }>(
+        "/auth/login",
+        {
+          username,
+          password,
+        }
+      )
       .then(({ data }) => {
-        setUser({ username: data.username, userId: data.user_id });
+        setUser({
+          username: data.username,
+          userId: data.user_id,
+          imageUrl: data.imageUrl,
+        });
         setLoginFailed(false);
       })
       .catch(() => setLoginFailed(true))

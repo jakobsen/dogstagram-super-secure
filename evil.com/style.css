@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Merriweather", serif;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+main {
+  width: 600px;
+  padding-top: 120px;
+  margin-inline: auto;
+}
+
+img {
+  display: block;
+  width: 100%;
+  border-radius: 32px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 4rem;
+}

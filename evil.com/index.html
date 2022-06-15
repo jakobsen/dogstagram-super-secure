@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,500;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Evil!!!!</title>
+  </head>
+  <body>
+    <main>
+      <h1>Vi elsker hunder</h1>
+      <p>Vi <em>lover</em>.</p>
+      <img
+        src="https://images.unsplash.com/photo-1453227588063-bb302b62f50b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8dWdseSUyMGRvZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60"
+        alt="NEI DET GJØR VI IKKE!!!!"
+      />
+    </main>
+    <!-- <iframe src="https://localhost:3000" style="visibility: hidden"></iframe> -->
+  </body>
+  <script>
+    let done = false;
+    if (!done) {
+      fetch("https://localhost:5000/posts/", {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          body: "KATTER ER MYE BEDRE ENN HUNDER!!!!! 😻😽😾",
+          imageUrl:
+            "https://images.unsplash.com/photo-1633601512367-2fe74221c58b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2728&q=80",
+        }),
+      })
+        .then(console.log("MOAHAHAHA"))
+        .finally(() => (done = true));
+    }
+  </script>
+</html>
